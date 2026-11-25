@@ -1,0 +1,38 @@
+digraph G {
+  rankdir=BT; nodesep=0.45; ranksep=0.7; splines=ortho;
+  graph [fontname="Helvetica"]; 
+  node [shape=record, fontname="Helvetica", fontsize=10, style=filled, fillcolor="#FFFFFF"];
+  edge [fontname="Helvetica", fontsize=9];
+
+  Produs [label="{Produs|- id : int (final)\l- denumire : String\l- pret : double\l- stoc : int\l|+ pretFinal() : double\l+ getStoc() : int\l+ scadeStoc(int)\l+ categorie() : String\l+ toString()\l+ equals(Object)\l}"];
+  Clatita [label="{Clatita|- aluat : Aluat\l|+ pretFinal()\l+ toString()\l}"];
+  ClatitaDulce [label="{ClatitaDulce|- toppinguri : int\l|+ pretFinal()\l+ toString()\l}"];
+  ClatitaSarata [label="{ClatitaSarata|- gramajUmplutura : int\l|+ pretFinal()\l+ toString()\l}"];
+  Bautura [label="{Bautura|- volumMl : int\l|+ pretFinal()\l+ toString()\l}"];
+  MeniuCombo [label="{MeniuCombo|- componente : ArrayList\<Produs\>\l|+ pretFinal()\l+ getStoc()\l+ scadeStoc(int)\l}"];
+  Aluat [label="{«enum»\nAluat|CLASIC\lINTEGRAL\lFARA_GLUTEN\l|- eticheta : String\l- coeficient : double\l}", fillcolor="#EEF3FB"];
+
+  Comanda [label="{Comanda|- linii : ArrayList\<LinieComanda\>\l|+ adauga(Produs, int)\l+ subtotal() : BigDecimal\l+ reducerePereche() : BigDecimal\l+ total() : BigDecimal\l}", fillcolor="#FFF8E6"];
+  LinieComanda [label="{LinieComanda|- produs : Produs\l- cantitate : int\l|+ subtotal() : BigDecimal\l}", fillcolor="#FFF8E6"];
+  Bon [label="{Bon|- numar : int\l- comanda : Comanda\l|+ afiseaza()\l}", fillcolor="#FFF8E6"];
+  Meniu [label="{Meniu|- denumire : String\l- produse : ArrayList\<Produs\>\l|+ adaugaProdus(Produs)\l}", fillcolor="#FFF8E6"];
+
+  /* mostenire: triunghi gol */
+  Clatita -> Produs [arrowhead=empty];
+  Bautura -> Produs [arrowhead=empty];
+  MeniuCombo -> Produs [arrowhead=empty];
+  ClatitaDulce -> Clatita [arrowhead=empty];
+  ClatitaSarata -> Clatita [arrowhead=empty];
+
+  /* asociere cu enum */
+  Clatita -> Aluat [arrowhead=vee, style=dashed];
+
+  /* compozitie: romb plin la proprietar */
+  Comanda -> LinieComanda [dir=back, arrowtail=diamond, taillabel="1", headlabel="0..*", labeldistance=1.6];
+
+  /* agregare: romb gol la agregator */
+  LinieComanda -> Produs [dir=back, arrowtail=odiamond, arrowhead=none];
+  Bon -> Comanda [dir=back, arrowtail=odiamond, arrowhead=none];
+  Meniu -> Produs [dir=back, arrowtail=odiamond, arrowhead=none];
+  MeniuCombo -> Produs [dir=back, arrowtail=odiamond, arrowhead=none, constraint=false, style=solid];
+}
